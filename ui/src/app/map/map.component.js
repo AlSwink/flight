@@ -7,28 +7,46 @@ class MapController {
   markers = []
   paths = []
 
-  constructor ($map, locations) {
+  constructor ($map, $scope, $interval, locations) {
     this.$map = $map
+    const self = this
 
-    // add markers from an angular constant
-    const { memphis, nashville, knoxville } = locations
-    const markers = [memphis, nashville, knoxville]
+    this.interval
+    this.testloc = {}
 
-    markers.forEach(marker => this.addMarker(marker))
+    $scope.getFlights = function () {
+      self.paths = []
+      $map.getAllLocations()
+        .then((data) => {
+          self.testloc = data
+          $map.getAllFlights()
+            .then((data) => {
+              data.forEach(args => {
+                const path = self.generatePath(args, self.testloc)
+                self.addPath(path.origin, path.destination, '#FF8990')
+              })
+            })
+        })
+    }
 
-    // add paths manually
-    const paths = [
-      [memphis, nashville, '#CC0099'],
-      [nashville, knoxville, '#AA1100']
-    ]
+    this.interval = $interval($scope.getFlights, 60000)
 
-    paths.forEach(args => this.addPath(...args))
+  }
 
-    // add path from webservice
-    $map.getMarkerByCityName('Chattanooga')
-      .then(chattanooga => {
-        this.addPath(knoxville, chattanooga, '#FF3388')
-      })
+  generatePath (flight, locations) {
+    const path = {
+      origin: {},
+      destination: {}
+    }
+    locations.forEach(loc => {
+      if (loc.city.toUpperCase() === flight.origin.toUpperCase()) {
+        path.origin = loc
+      }
+      if (loc.city.toUpperCase() === flight.destination.toUpperCase()) {
+        path.destination = loc
+      }
+    })
+    return path
   }
 
   addMarker ({ latitude, longitude }) {

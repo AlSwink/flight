@@ -1,4 +1,6 @@
 import flightMap from './map/map.module'
+import login from './login/login.module'
+import sidemenu from './sidemenu/sidemenu.module'
 import apiUrl from './api.url'
 import appComponent from './app.component.js'
 
@@ -11,7 +13,9 @@ export default
       'ngMessages',
       'ui.router',
 
-      flightMap
+      flightMap,
+      login,
+      sidemenu
     ])
     .constant('apiUrl', apiUrl)
     .component('flightApp', appComponent)
