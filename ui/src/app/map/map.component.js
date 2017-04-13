@@ -14,7 +14,7 @@ class MapController {
     this.interval
     this.testloc = {}
 
-    $scope.getFlights = function () {
+    this.getFlights = function () {
       self.paths = []
       $map.getAllLocations()
         .then((data) => {
@@ -29,8 +29,8 @@ class MapController {
         })
     }
 
-    this.interval = $interval($scope.getFlights, 60000)
-
+    this.getFlights()
+    this.interval = $interval(self.getFlights, 30000)
   }
 
   generatePath (flight, locations) {

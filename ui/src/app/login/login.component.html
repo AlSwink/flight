@@ -1,4 +1,4 @@
-<md-content class="login view">
+<md-content class="login view" ng-show="!$loginCtrl.loggedIn()">
   <div class="input row">
     <md-input-container class="username">
       <label>username</label>
@@ -10,7 +10,7 @@
     </md-input-container>
   </div>
   <div class="select row">
-    <md-button class="button2">Login</md-button>
-    <md-button class="button2">Register</md-button>
+    <md-button class="button2" ng-click="$loginCtrl.loginClick(username, password)">Login</md-button>
+    <md-button class="button2" ng-click="$loginCtrl.registerClick(username, password)">Register</md-button>
   </div>
 </md-content>

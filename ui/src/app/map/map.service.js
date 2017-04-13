@@ -21,6 +21,14 @@ class MapService {
       })
   }
 
+  searchFlights (wrapper) {
+    return this.$http
+      .post(`${this.apiUrl}/flights/search`, JSON.stringify(wrapper))
+      .then(result => {
+        return result.data
+      })
+  }
+
   getAllLocations () {
     return this.$http
       .get(`${this.apiUrl}/location`)

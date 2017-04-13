@@ -1,27 +1,50 @@
 <md-content class="menu sidemenu md-primary">
     <div layout="column" class="searchbox-list">
       <md-toolbar class='md-primary' layout='column' layout-align='center center'>
-        <md-input-container class="searchbox-search md-primary" >
-          <label class='searchbox-label'>Search flights</label>
-          <input class='searchbox-searchfield' ng-model="listfilter" type="text"/>
+        <md-input-container class="searchbox-search md-primary" ng-show="$sideCtrl.loggedIn()">
+          <label class='searchbox-label'>Origin</label>
+          <input class='searchbox-searchfield' type="text" ng-model="origin"/>
         </md-input-container>
+        <md-input-container class="searchbox-search md-primary" ng-show="$sideCtrl.loggedIn()">
+          <label class='searchbox-label'>Destination</label>
+          <input class='searchbox-searchfield' type="text" ng-model="destination"/>
+        </md-input-container>
+        <md-button class="button2" ng-show="$sideCtrl.loggedIn()" ng-click="$sideCtrl.searchFlights(origin, destination); $sideCtrl.searchToggle()">Search</md-button>
       </md-toolbar>
-      <md-grid-list ng-show='ctrl.isMenuState("people")'
+      <md-grid-list ng-show="$sideCtrl.showItinerary === false"
           md-cols-gt-md="1" md-cols="1" md-cols-md="1"
           md-row-height-gt-md="4:1" md-row-height="4:1"
           md-gutter-gt-md="0px" md-gutter-md="0px" md-gutter="0px">
         <md-grid-tile
-              ng-repeat="item in ctrl.listdata | filter:listfilter"
+              ng-repeat="item in $sideCtrl.listdata"
               ng-style="{}"
-              style='background-color:{{ctrl.getRandomColor($index)}}'
-
+              style='background-color:{{$sideCtrl.getRandomColor($index)}}'
               md-colspan='1'
-              class="searchbox-nocursor"
-
-              ng-click="ctrl.getUser(item)">
-
-            <p>{{item}}</p>
+              class="searchbox-nocursor">
+            <p>{{item.origin}} to {{item.destination}}</p>
+          </md-grid-tile>
+          <md-grid-tile>
+            <md-button class="button2" ng-show="$sideCtrl.search" ng-click='$sideCtrl.bookItinerary()'>Book Itinerary</md-button>
+            <md-button class="button2" ng-show="$sideCtrl.search" ng-click='$sideCtrl.getItinerary()'>Get Itinerary</md-button>
           </md-grid-tile>
         </md-grid-list>
+        <md-grid-list ng-show="$sideCtrl.showItinerary === true"
+            md-cols-gt-md="1" md-cols="1" md-cols-md="1"
+            md-row-height-gt-md="4:1" md-row-height="4:1"
+            md-gutter-gt-md="0px" md-gutter-md="0px" md-gutter="0px">
+            <md-grid-tile
+                  ng-repeat="item in $sideCtrl.listdata"
+                  ng-style="{}"
+                  style='background-color:{{$sideCtrl.getRandomColor($index)}}'
+                  md-colspan='1'
+                  class="searchbox-nocursor">
+                <p>{{item.origin}} to {{item.destination}}</p>
+                <p>Total Layover: {{item.layover}}</p>
+                <p>Total Flight Time:{{item.flightTime}}</p>
+              </md-grid-tile>
+              <md-grid-tile>
+                <md-button class="button2" ng-click="$sideCtrl.backClick()">Back</md-button>
+              </md-grid-tile>
+            </md-grid-list>
       </div>
 </md-content>
